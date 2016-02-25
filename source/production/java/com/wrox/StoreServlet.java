@@ -196,6 +196,7 @@ public class StoreServlet extends HttpServlet
     private void confirmation(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
+
         request.getRequestDispatcher("/WEB-INF/jsp/view/registerSuccess.jsp")
                 .forward(request, response);
     }

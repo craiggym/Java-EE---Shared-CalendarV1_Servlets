@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="Shared_Calendar:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="Shared_Calendar-1.0.0.SNAPSHOT.war">
+      <element id="artifact" artifact-name="Shared_Calendar:war exploded" />
+    </root>
+  </artifact>
+</component>
