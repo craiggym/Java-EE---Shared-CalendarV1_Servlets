@@ -56,21 +56,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <!-- From Bharath's Pom
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.0-alpha-1</version>
-            <scope></scope>
-        </dependency>
-        -->
     </dependencies>
 
     <build>
@@ -80,13 +65,6 @@
                 <directory>source/production/resources</directory>
             </resource>
         </resources>
-
-        <testSourceDirectory>source/test/java/unit</testSourceDirectory>
-        <testResources>
-            <testResource>
-                <directory>source/test/java/resources</directory>
-            </testResource>
-        </testResources>
 
         <plugins>
             <plugin>

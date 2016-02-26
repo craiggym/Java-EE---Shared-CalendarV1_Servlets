@@ -10,13 +10,13 @@
 <html>
 <head>
     <title>Register</title>
-    <link rel="stylesheet" type="text/css" href="styles/reg.css"/>
+    <link rel="stylesheet" type="text/css" href="styles/styles.css"/>
 </head>
 <body>
     <h1>Sign up while it's free!</h1>
     <br/>
     <br/>
-    <form action="?action=userRegister" method="POST">
+    <form action="register" method="POST">
         <fieldset>
             <legend><em>Personal Information</em></legend><br/>
             <label>First name: </label><span> <input type="text" name="fname"></span>
