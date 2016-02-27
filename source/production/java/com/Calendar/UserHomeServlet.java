@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * Created by BHARATH on 2/26/2016.
  */
-@WebServlet(name = "UserHomeServlet", urlPatterns = {"/loginsuccess","/welcome"})
+@WebServlet(name = "UserHomeServlet", urlPatterns = {"/loginsuccess","/welcome","/userhomepage"})
 public class UserHomeServlet extends HttpServlet {
 
     private Map<Integer, event> eventDatabase = new LinkedHashMap<>();
@@ -23,12 +23,6 @@ public class UserHomeServlet extends HttpServlet {
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
         if (request.getSession().getAttribute("username") == null) {
             response.sendRedirect("home");
             return;
@@ -50,8 +44,15 @@ public class UserHomeServlet extends HttpServlet {
             default:
                 this.userHome(request, response);
                 break;
+
+    }}
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+
+
         }
-    }
+
         private void createEvent(HttpServletRequest request,HttpServletResponse response)
         throws ServletException, IOException
         {

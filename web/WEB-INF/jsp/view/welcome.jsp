@@ -9,10 +9,10 @@
 <h1>Welcome</h1>
 <br/>
 <br/>
-<form action="loginsuccess?action=create" method="POST">
+<form action="welcome?action=create" method="POST">
     <input type="submit" value="Create Event"><br/>
 </form>
-<form action="loginsuccess?action=logout" method="POST">
+<form action="welcome?action=logout" method="POST">
     <input type="submit" value="Log out"><br/>
     <br/>
     <hr/>
