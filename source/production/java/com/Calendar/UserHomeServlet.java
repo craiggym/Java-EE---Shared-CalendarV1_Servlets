@@ -29,34 +29,45 @@ public class UserHomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         //PrintWriter out=response.getWriter();
-        //out.println("hello");if(request.getSession().getAttribute("username") == null)
-        {
-            response.sendRedirect("login");
+        //out.println("hello");
+        if (request.getSession().getAttribute("username") == null) {
+            response.sendRedirect("home");
             return;
         }
 
         String action = request.getParameter("action");
-        if(action == null)
+        if (action == null)
             action = "list";
-        switch(action)
-        {
+        switch (action) {
             case "create":
-                this.showTicketForm(request, response);
+                this.createEvent(request, response);
                 break;
             case "view":
-                this.viewTicket(request, response);
-                break;
-            case "download":
-                this.downloadAttachment(request, response);
+                this.userHome(request, response);
                 break;
             case "list":
             default:
-                this.listTickets(request, response);
+                this.userHome(request, response);
                 break;
         }
+    }
+        private void createEvent(HttpServletRequest request,HttpServletResponse response)
+        throws ServletException, IOException
+        {
+            request.getRequestDispatcher("/WEB-INF/jsp/view/createEvent.jsp")
+                    .forward(request, response);
+        }
+    private void userHome(HttpServletRequest request,HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        request.getRequestDispatcher("/WEB-INF/jsp/view/createEvent.jsp")
+                .forward(request, response);
+    }
 
-        PrintWriter out=response.getWriter();
-        out.println("hello");
+
+
+
+    //PrintWriter out=response.getWriter();
+        //out.println("hello");
 
     }
-}
