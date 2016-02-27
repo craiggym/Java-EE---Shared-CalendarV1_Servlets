@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * Created by BHARATH on 2/26/2016.
  */
-@WebServlet(name = "UserHomeServlet", urlPatterns = {"/loginsuccess"})
+@WebServlet(name = "UserHomeServlet", urlPatterns = {"/loginsuccess","/welcome"})
 public class UserHomeServlet extends HttpServlet {
 
     private Map<Integer, event> eventDatabase = new LinkedHashMap<>();
@@ -28,35 +28,50 @@ public class UserHomeServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        //PrintWriter out=response.getWriter();
-        //out.println("hello");if(request.getSession().getAttribute("username") == null)
-        {
-            response.sendRedirect("login");
+
+        if (request.getSession().getAttribute("username") == null) {
+            response.sendRedirect("home");
             return;
         }
 
         String action = request.getParameter("action");
-        if(action == null)
+        if (action == null)
             action = "list";
-        switch(action)
-        {
+        switch (action) {
             case "create":
-                this.showTicketForm(request, response);
+                this.createEvent(request, response);
                 break;
             case "view":
-                this.viewTicket(request, response);
+                this.userHome(request, response);
                 break;
-            case "download":
-                this.downloadAttachment(request, response);
+            case "logout":
+                this.userHome(request, response);
                 break;
-            case "list":
             default:
-                this.listTickets(request, response);
+                this.userHome(request, response);
                 break;
         }
+    }
+        private void createEvent(HttpServletRequest request,HttpServletResponse response)
+        throws ServletException, IOException
+        {
+            request.getRequestDispatcher("/WEB-INF/jsp/view/createEvent.jsp")//to create an event
+                    .forward(request, response);
+        }
+          private void userHome(HttpServletRequest request,HttpServletResponse response)
+            throws ServletException, IOException
+         {
+        request.getRequestDispatcher("/WEB-INF/jsp/view/welcome.jsp")//User's Home page
+                .forward(request, response);
+        }
+    private void logout(HttpServletRequest request,HttpServletResponse response)
+            throws ServletException, IOException
+    {
 
-        PrintWriter out=response.getWriter();
-        out.println("hello");
+        System.out.println("In log out");//to invalidate the session
+    }
+
+
+
 
     }
-}
