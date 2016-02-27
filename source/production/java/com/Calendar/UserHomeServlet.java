@@ -68,7 +68,7 @@ public class UserHomeServlet extends HttpServlet {
             throws ServletException, IOException
     {
 
-    //to invalidate the session
+        System.out.println("In log out");//to invalidate the session
     }
 
 
