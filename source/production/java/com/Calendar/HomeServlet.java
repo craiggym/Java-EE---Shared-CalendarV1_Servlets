@@ -13,18 +13,18 @@ import java.util.Map;
 
 @WebServlet(
         name = "HomeServlet",
-        urlPatterns = {"/home"}
+        urlPatterns = {"/home","/loginservlet"}
 )
 public class HomeServlet extends HttpServlet
 {
     // User class which holds username and password
-    public class User{
+    /*public class User{
         public User(String name, String pass){ // Constructor for User
             this.name=name;
             this.password=pass;
         }
 
-        private LinkedList<String> events = new LinkedList<>(); // user events
+        //private LinkedList<String> events = new LinkedList<>(); // user events
         private String name; // user's name
         private String password; // user's password
     } // Close class User
@@ -44,7 +44,15 @@ public class HomeServlet extends HttpServlet
         this.db.put(ID++, cesar);
         this.db.put(ID++, pocahontas);
     }
+*/
+    private static final Map<String, String> userDatabase = new Hashtable<>();
 
+    static {
+        userDatabase.put("Nicholas", "password");
+        userDatabase.put("Sarah", "drowssap");
+        userDatabase.put("Mike", "wordpass");
+        userDatabase.put("John", "green");
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -59,6 +67,9 @@ public class HomeServlet extends HttpServlet
             case "userAdd":
                 this.userAdd(request, response);
                 break;
+            case "login":
+                this.login(request, response);
+                break;
 
             case "goHome":
                 this.goHome(request, response);
@@ -67,6 +78,24 @@ public class HomeServlet extends HttpServlet
             default:
                 this.goHome(request, response);
                 break;
+        }
+    }
+
+    private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username=request.getParameter("user");
+        String password=request.getParameter("pass");
+        if(username == null || password == null ||
+                !HomeServlet.userDatabase.containsKey(username) ||
+                !password.equals(HomeServlet.userDatabase.get(username)))
+        {
+            request.getRequestDispatcher("/WEB-INF/jsp/view/browse.jsp")
+                    .forward(request, response);
+        }
+        else
+        {
+            HttpSession session = request.getSession();
+            session.setAttribute("username",username);
+            response.sendRedirect("loginsuccess");
         }
     }
 
@@ -105,9 +134,11 @@ public class HomeServlet extends HttpServlet
     {
         String fname = request.getParameter("fname");
         String pass = request.getParameter("pass");
-        User person = new User(fname, pass);
-        db.put(ID++,person); // add the user
-        System.out.println("User " + ID + " added.");
+        //User person = new User(fname, pass);
+        //Hdb.put(ID++,person); // add the user
+        HomeServlet.userDatabase.put(fname,pass);
+
+        System.out.println("User " + fname + " added.");
 
         request.getRequestDispatcher("/WEB-INF/jsp/view/registerSuccess.jsp")
                 .forward(request, response);
