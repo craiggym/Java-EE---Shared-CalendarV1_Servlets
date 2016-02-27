@@ -16,21 +16,14 @@ import java.util.Map;
 /**
  * Created by BHARATH on 2/26/2016.
  */
-@WebServlet(name = "UserHomeServlet",
-        urlPatterns = {"/loginsuccess","/welcome"})
-public class UserHomeServlet extends HttpServlet {
+@WebServlet(name = "EventServlet",
+        urlPatterns = {"/loginsuccess","/welcome", "event"})
+public class EventServlet extends HttpServlet {
 
-    private Map<Integer, event> eventDatabase = new LinkedHashMap<>();
-
+    private Map<String, Event> event = new LinkedHashMap<>();
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
         if (request.getSession().getAttribute("username") == null) {
             response.sendRedirect("home");
             return;
@@ -41,7 +34,10 @@ public class UserHomeServlet extends HttpServlet {
             action = "list";
         switch (action) {
             case "create":
-                this.createEvent(request, response);
+                this.createEventPage(request, response);
+                break;
+            case "create_event":
+                this.addEvent(request,response);
                 break;
             case "view":
                 this.userHome(request, response);
@@ -55,20 +51,49 @@ public class UserHomeServlet extends HttpServlet {
         }
     }
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (request.getSession().getAttribute("username") == null) {
+            response.sendRedirect("home");
+            return;
+        }
+
+        String action = request.getParameter("action");
+        if (action == null)
+            action = "list";
+        switch (action) {
+            default:
+                this.userHome(request, response);
+                break;
+        }
+    }
+
     /*********************************************************
-     * CreateEvent
+     * CreateEventPage
      * Allow the user to create events
      * @param request
      * @param response
      * @throws ServletException
      * @throws IOException
      ********************************************************/
-    private void createEvent(HttpServletRequest request,HttpServletResponse response)
+    private void createEventPage(HttpServletRequest request,HttpServletResponse response)
         throws ServletException, IOException
         {
             request.getRequestDispatcher("/WEB-INF/jsp/view/createEvent.jsp")//to create an event
                     .forward(request, response);
         }
+    /*********************************************************
+     * addEvent
+     * Allow the user to create events
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     ********************************************************/
+    private void addEvent(HttpServletRequest request,HttpServletResponse response)
+            throws ServletException, IOException
+    {
+            
+    }
     /*********************************************************
      *userHome
      * Redirect to userHome page
