@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * Created by BHARATH on 2/26/2016.
  */
-@WebServlet(name = "UserHomeServlet", urlPatterns = {"/loginsuccess"})
+@WebServlet(name = "UserHomeServlet", urlPatterns = {"/loginsuccess","/welcome"})
 public class UserHomeServlet extends HttpServlet {
 
     private Map<Integer, event> eventDatabase = new LinkedHashMap<>();
@@ -28,8 +28,7 @@ public class UserHomeServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        //PrintWriter out=response.getWriter();
-        //out.println("hello");
+
         if (request.getSession().getAttribute("username") == null) {
             response.sendRedirect("home");
             return;
@@ -45,7 +44,9 @@ public class UserHomeServlet extends HttpServlet {
             case "view":
                 this.userHome(request, response);
                 break;
-            case "list":
+            case "logout":
+                this.userHome(request, response);
+                break;
             default:
                 this.userHome(request, response);
                 break;
@@ -54,20 +55,23 @@ public class UserHomeServlet extends HttpServlet {
         private void createEvent(HttpServletRequest request,HttpServletResponse response)
         throws ServletException, IOException
         {
-            request.getRequestDispatcher("/WEB-INF/jsp/view/createEvent.jsp")
+            request.getRequestDispatcher("/WEB-INF/jsp/view/createEvent.jsp")//to create an event
                     .forward(request, response);
         }
-    private void userHome(HttpServletRequest request,HttpServletResponse response)
+          private void userHome(HttpServletRequest request,HttpServletResponse response)
+            throws ServletException, IOException
+         {
+        request.getRequestDispatcher("/WEB-INF/jsp/view/welcome.jsp")//User's Home page
+                .forward(request, response);
+        }
+    private void logout(HttpServletRequest request,HttpServletResponse response)
             throws ServletException, IOException
     {
-        request.getRequestDispatcher("/WEB-INF/jsp/view/createEvent.jsp")
-                .forward(request, response);
+
+    //to invalidate the session
     }
 
 
 
-
-    //PrintWriter out=response.getWriter();
-        //out.println("hello");
 
     }
