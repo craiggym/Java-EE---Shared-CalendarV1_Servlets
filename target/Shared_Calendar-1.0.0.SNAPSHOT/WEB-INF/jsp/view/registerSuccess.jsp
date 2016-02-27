@@ -13,6 +13,6 @@
 <body>
     <h1>Congratulations <%= request.getParameter("fname")%></h1>
     <h2>You have successfully registered!</h2>
-    <a href="login">Click here to log in!</a>
+    <a href="home">Click here to log in!</a>
 </body>
 </html>
