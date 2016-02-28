@@ -48,10 +48,10 @@ public class HomeServlet extends HttpServlet
     private static final Map<String, String> userDatabase = new Hashtable<>();
 
     static {
-        userDatabase.put("Nicholas", "password");
-        userDatabase.put("Sarah", "drowssap");
-        userDatabase.put("Mike", "wordpass");
-        userDatabase.put("John", "green");
+        userDatabase.put("Neil", "Armstrong");
+        userDatabase.put("Abraham", "Lincoln");
+        userDatabase.put("Cesar", "Chavez");
+        userDatabase.put("Pocahontas", "Rebeccarolfe");
     }
 
     @Override
@@ -88,6 +88,11 @@ public class HomeServlet extends HttpServlet
                 !HomeServlet.userDatabase.containsKey(username) ||
                 !password.equals(HomeServlet.userDatabase.get(username)))
         {
+            if(!HomeServlet.userDatabase.containsKey(username) ||
+                    !password.equals(HomeServlet.userDatabase.get(username)))
+                request.getRequestDispatcher("/WEB-INF/jsp/view/browseIncorrect.jsp")
+                        .forward(request, response);
+
             request.getRequestDispatcher("/WEB-INF/jsp/view/browse.jsp")
                     .forward(request, response);
         }

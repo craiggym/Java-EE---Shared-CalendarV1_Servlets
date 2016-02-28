@@ -9,7 +9,7 @@
 <h1></h1>
 <br/>
 <br/>
-<form action="" method="POST">
+<form action="event?create_event" method="POST">
     <fieldset>
         <legend><em>Event Details</em></legend><br/>
         <label>Event name: </label><span> <input type="text" name="eventName"></span>

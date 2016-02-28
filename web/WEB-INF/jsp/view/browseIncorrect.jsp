@@ -6,6 +6,7 @@
     </head>
     <body>
         <h1>Event page</h1>
+        <p style="color:darkred">Incorrect username/password</p>
         <h2><a href="register">Link to Register</a></h2>
     <form action="home?action=login" method="POST">
        Username: <input type="text" name="user"/><br>
