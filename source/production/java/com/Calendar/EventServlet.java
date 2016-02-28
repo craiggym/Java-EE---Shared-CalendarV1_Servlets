@@ -9,6 +9,9 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -17,11 +20,11 @@ import java.util.Map;
  * Created by BHARATH on 2/26/2016.
  */
 @WebServlet(name = "EventServlet",
-        urlPatterns = {"/loginsuccess","/welcome", "event"})
+        urlPatterns = {"/eventServlet", "/event"})
 public class EventServlet extends HttpServlet {
 
-    private Map<String, Event> event = new LinkedHashMap<>();
-
+    public static Map<String, String> Created = new LinkedHashMap<>();
+    //public static Map<String, String> Liked = new LinkedHashMap<>();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getSession().getAttribute("username") == null) {
@@ -37,8 +40,9 @@ public class EventServlet extends HttpServlet {
                 this.createEventPage(request, response);
                 break;
             case "create_event":
-                this.addEvent(request,response);
-                break;
+
+                    this.addEvent(request,response);
+                     break;
             case "view":
                 this.userHome(request, response);
                 break;
@@ -90,9 +94,25 @@ public class EventServlet extends HttpServlet {
      * @throws IOException
      ********************************************************/
     private void addEvent(HttpServletRequest request,HttpServletResponse response)
-            throws ServletException, IOException
-    {
-            
+            throws ServletException, IOException{
+
+        request.getRequestDispatcher("/WEB-INF/jsp/view/welcome.jsp")//to create an event
+                .forward(request, response);
+        HttpSession session = request.getSession(false);
+        String eventName=request.getParameter("eventName");
+        String eventDescription=request.getParameter("Description");
+        String eventDate=request.getParameter("eventDate");
+        //HttpSession session=request.getSession(false);
+
+        session.setAttribute("eventName",eventName);
+        session.setAttribute("eventDate",eventDate);
+        session.setAttribute("Description",eventDescription);
+        EventServlet.Created.put("eventDate","eventName");
+        session.setAttribute("Created",this.Created);
+
+
+        request.getRequestDispatcher("/WEB-INF/jsp/view/welcome.jsp")//User's Home page
+                .forward(request, response);
     }
     /*********************************************************
      *userHome
@@ -105,6 +125,9 @@ public class EventServlet extends HttpServlet {
     private void userHome(HttpServletRequest request,HttpServletResponse response)
             throws ServletException, IOException
          {
+             HttpSession session = request.getSession(false);
+             String username =(String)session.getAttribute("username");
+
         request.getRequestDispatcher("/WEB-INF/jsp/view/welcome.jsp")//User's Home page
                 .forward(request, response);
         }
@@ -119,8 +142,9 @@ public class EventServlet extends HttpServlet {
     private void logout(HttpServletRequest request,HttpServletResponse response)
             throws ServletException, IOException
     {
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
         session.invalidate();//to invalidate the session
+        System.out.println("In Log out");
         request.getRequestDispatcher("/WEB-INF/jsp/view/logout.jsp")
                 .forward(request, response);
     }

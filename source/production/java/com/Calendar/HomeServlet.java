@@ -98,9 +98,11 @@ public class HomeServlet extends HttpServlet
         }
         else
         {
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(true);
+            String id=session.getId();
+            System.out.println("id is "+id);
             session.setAttribute("username",username);
-            response.sendRedirect("loginsuccess");
+            response.sendRedirect("event");
         }
     }
 

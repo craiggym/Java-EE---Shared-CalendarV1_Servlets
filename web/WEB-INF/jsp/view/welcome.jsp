@@ -1,3 +1,4 @@
+<%@ page import="java.util.Map" %>
 <!DOCTYPE HTML>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -6,16 +7,21 @@
     <link rel="stylesheet" type="text/css" href="styles/styles.css"/>
 </head>
 <body>
-<h1>Welcome</h1>
+
+<h1>Welcome <%=session.getAttribute("username")%></h1>
 <br/>
 <br/>
-<form action="welcome?action=create" method="POST">
+<form action="event?action=create" method="POST">
     <input type="submit" value="Create Event"><br/>
 </form>
-<form action="welcome?action=logout" method="POST">
+<form action="event?action=logout" method="POST">
     <input type="submit" value="Log out"><br/>
-    <br/>
-    <hr/>
+    </form>
+
+<form action="home" method="POST">
+    <input type="submit" value="Event Page">
 </form>
+<br/>
+<hr/>
 </body>
 </html>
