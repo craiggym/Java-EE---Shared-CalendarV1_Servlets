@@ -17,10 +17,14 @@ import java.util.Map;
  * Created by BHARATH on 2/26/2016.
  */
 @WebServlet(name = "EventServlet",
-        urlPatterns = {"/loginsuccess","/welcome", "event"})
+        urlPatterns = {"/loginsuccess","/welcome", "/event"})
 public class EventServlet extends HttpServlet {
 
     private Map<String, Event> event = new LinkedHashMap<>();
+    private Event testEvent = new Event("Golfing",
+            "Going to golf with the boss",
+            "03-21-2016");
+
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -28,6 +32,7 @@ public class EventServlet extends HttpServlet {
             response.sendRedirect("home");
             return;
         }
+        event.put(" ",testEvent);
 
         String action = request.getParameter("action");
         if (action == null)
@@ -92,7 +97,7 @@ public class EventServlet extends HttpServlet {
     private void addEvent(HttpServletRequest request,HttpServletResponse response)
             throws ServletException, IOException
     {
-            
+
     }
     /*********************************************************
      *userHome

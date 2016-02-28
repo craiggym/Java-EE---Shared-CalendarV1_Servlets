@@ -7,11 +7,15 @@ public class Event {
 
 
     private String eventName;
-
     private String eventDate;
+    private String eventDesc;
 
-    private String description;
-
+    // Constructor to set variables //
+    Event(String eName, String eDate, String eDesc){
+        this.eventName = eName;
+        this.eventDate = eDate;
+        this.eventDesc = eDesc;
+    }
 
 
 }
