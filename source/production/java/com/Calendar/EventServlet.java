@@ -59,6 +59,9 @@ public class EventServlet extends HttpServlet {
             case "userEventView":
                 this.userview(request, response);
                 break;*/
+            case "viewAll":
+                this.viewAll(request, response);
+                break;
             default:
                 this.userHome(request, response);
                 break;
@@ -141,9 +144,13 @@ public class EventServlet extends HttpServlet {
         session.setAttribute("Description", eventDescription);
         session.setAttribute("eventDate", eventDate);
         session.setAttribute("username", username);
-        session.setAttribute("id", id);
+        session.setAttribute("id", id++);
 
         Event createdNewEvent = new Event(eventName, eventDate, eventDescription, username, id);
+
+        LinkedList checkForNull = eventDatabase.get(username);
+        if(checkForNull == null) eventLinkedList = new LinkedList<>();
+
         eventLinkedList.add(createdNewEvent); // Append new event even if there are no events in list
         eventDatabase.put(username,eventLinkedList); // The appended linked list will overwrite pre-existing one
        // personalDatabase.put(id++,createdNewEvent);
@@ -188,25 +195,24 @@ public class EventServlet extends HttpServlet {
                 .forward(request, response);
         }
 
-
-    private void userview(HttpServletRequest request,HttpServletResponse response)
+    /*********************************************************
+     *viewAll
+     * Redirect to Home page displaying all events
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     ********************************************************/
+    private void viewAll(HttpServletRequest request,HttpServletResponse response)
             throws ServletException, IOException
     {
-        request.getRequestDispatcher("/WEB-INF/jsp/view/userView.jsp")
+        HttpSession session = request.getSession(false);
+        String username =(String)session.getAttribute("username");
+        request.setAttribute("eventDatabase", this.eventDatabase);
+
+        request.getRequestDispatcher("/WEB-INF/jsp/view/browse.jsp")//User's Home page
                 .forward(request, response);
     }
 
-
-
-    private void usercreated(HttpServletRequest request,HttpServletResponse response)
-            throws ServletException, IOException
-    {
-
-      //  request.setAttribute("Created", this.personalDatabase);
-
-
-        request.getRequestDispatcher("/WEB-INF/jsp/view/usercreated.jsp")
-                .forward(request, response);
-    }
 
 }

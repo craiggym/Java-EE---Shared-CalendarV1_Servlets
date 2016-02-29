@@ -51,7 +51,7 @@ public class HomeServlet extends HttpServlet
         userDatabase.put("Neil", "Armstrong");
         userDatabase.put("th", "th");
         userDatabase.put("Cesar", "Chavez");
-        userDatabase.put("", "");
+        userDatabase.put("test", "");
     }
 
     /*****************************************************

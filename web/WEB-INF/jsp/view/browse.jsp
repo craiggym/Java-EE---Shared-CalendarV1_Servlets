@@ -9,7 +9,8 @@
         <title>Bharath</title>
             <%    @SuppressWarnings("unchecked")
 
-     Map<Integer,Event> Events= (Map<Integer, Event>)request.getAttribute("eventDatabase");%>
+    Map<String, LinkedList<Event>> eventDatabase =
+            (Map<String, LinkedList<Event>>)request.getAttribute("eventDatabase");%>
     </head>
     <body>
         <h1>Event page</h1>
@@ -35,20 +36,32 @@
         </form>
         <br/>
         <hr/>
-                    <%if (Events != null){
-                    for(Event name : Events.values()) {
-                Integer id = name.getId();
-                Date date = name.getEventDate();
-                String eventName = name.getEventName();
-                String desc = name.getDescription();
-                String username = name.getUsername();%>
-                <p><b>Event id:</b></p><%=id%><br/>
-                <p><b>Event Date:</b></p><%=date%><br/>
-                <p><b>Event Name:</b></p><%=eventName%><br/>
-                <p><b>Event Description:</b></p><%=desc%><br/>
-                <p><b>Created By:</b></p><%=username %><br/><br/>
-            <% }
-            }%>
+                    <%
+       if(eventDatabase != null){
+       for(String name : eventDatabase.keySet()){
+            if(eventDatabase.get(session.getAttribute(name)) != null ){
+            LinkedList<Event> e = eventDatabase.get(session.getAttribute(name));// grab all values for key
+            for(int i = 0; i < e.size(); i++)
+                {
+                    String eventName = e.get(i).getEventName();
+                    Date eventDate = e.get(i).getEventDate();
+                    String eventDesc = e.get(i).getDescription();
+                    String eventUser = e.get(i).getUsername();
+                    int eventID = e.get(i).getId();
+                    %>
+                Event: <%= eventName %> <br/>
+                Date: <%= eventDate %> <br/>
+                Description: <%= eventDesc %> <br/>
+                User: <%= eventUser %> <br/>
+                EventID: <%= eventID %> <br/>
+                <br />
+                    <%
+                }
+                }
+}
+
+    }
+%>
 
     </body>
 </html>

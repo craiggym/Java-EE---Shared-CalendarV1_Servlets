@@ -25,11 +25,9 @@
 <br/>
 <br/>
 
-<%
-    Object value = eventDatabase.get(session.getAttribute("userame"));
-    if (value==null){
-    if(eventDatabase == null || eventDatabase.size() == 0)
-    {
+<% // Display message if the user has no events
+    LinkedList<Event> checkForNull = eventDatabase.get(session.getAttribute("username"));
+    if(checkForNull == null || checkForNull.isEmpty()){
 %><h3>Not subscribed to any events!</h3> <br/><p><em>Create one or follow one from the All Events page!</em><p></p><%
 }
 else
@@ -37,33 +35,27 @@ else
     for(String eName : eventDatabase.keySet())
     {
         System.out.println("Username is " + session.getAttribute("username"));
+        System.out.println("key is " + eName);
         if(eName == session.getAttribute("username")){
-            for(LinkedList<Event> name : eventDatabase.values()) // grab all values for key
-            {
-                if(eName != session.getAttribute("username")) break;
-                LinkedList<Event> e = name;
-                for(int i = 0; i < e.size(); i++)
+            LinkedList<Event> e = eventDatabase.get(session.getAttribute("username"));// grab all values for key
+            for(int i = 0; i < e.size(); i++)
                 {
                     String eventName = e.get(i).getEventName();
                     Date eventDate = e.get(i).getEventDate();
                     String eventDesc = e.get(i).getDescription();
                     String eventUser = e.get(i).getUsername();
                     int eventID = e.get(i).getId();
+                    %>
+Event: <%= eventName %> <br/>
+Date: <%= eventDate %> <br/>
+Description: <%= eventDesc %> <br/>
+User: <%= eventUser %> <br/>
+EventID: <%= eventID %> <br/>
+<br />
+<%
+                }
+                }
 
-
-
-%>Event: <%= eventName %> <br/>
- Date: <%= eventDate %> <br/>
- Description: <%= eventDesc %> <br/>
- User: <%= eventUser %> <br/>
- EventID: <%= eventID %> <br/>
-
-<br /><%
-                }}
-
-                }else{}
-
-        }
         }
     }
 %>
@@ -77,7 +69,7 @@ else
     <input type="submit" value="Log out"><br/>
 </form>
 
-<form action="home" method="POST">
+<form action="event?action=viewAll" method="POST">
     <input type="submit" value="Event Page">
 </form>
 <br/>
