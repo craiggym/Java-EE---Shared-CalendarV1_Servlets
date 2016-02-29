@@ -54,6 +54,29 @@ public class HomeServlet extends HttpServlet
         userDatabase.put("Pocahontas", "Rebeccarolfe");
     }
 
+    /*****************************************************
+     * doPost Method
+     * Goes directly to doGet
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     ****************************************************/
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        doGet(request,response);
+    }
+
+    /****************************************************
+     * doGet Method
+     * Handles user requests relating to logging in, logging out, adding, and going home
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     ***************************************************/
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
@@ -70,7 +93,9 @@ public class HomeServlet extends HttpServlet
             case "login":
                 this.login(request, response);
                 break;
-
+            case "logout":
+                this.logout(request, response);
+                break;
             case "goHome":
                 this.goHome(request, response);
                 break;
@@ -98,17 +123,28 @@ public class HomeServlet extends HttpServlet
         }
         else
         {
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(true);
+            String id=session.getId();
+            System.out.println("id is "+id);
             session.setAttribute("username",username);
-            response.sendRedirect("loginsuccess");
+            response.sendRedirect("event");
         }
     }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    /*********************************************************
+     *logout
+     * Logs the user out
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     ********************************************************/
+    private void logout(HttpServletRequest request,HttpServletResponse response)
             throws ServletException, IOException
     {
-        doGet(request,response);
+        HttpSession session = request.getSession(false);
+        session.invalidate();//to invalidate the session
+        request.getRequestDispatcher("/WEB-INF/jsp/view/logout.jsp")
+                .forward(request, response);
     }
 
     /************************************************************************
