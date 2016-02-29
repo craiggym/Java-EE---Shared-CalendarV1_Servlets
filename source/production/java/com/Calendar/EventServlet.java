@@ -159,20 +159,6 @@ public class EventServlet extends HttpServlet {
 
         System.out.println("size of Map "+this.eventDatabase.size());
 
-   /*     Event e=new Event();
-        e.setUsername(username);
-        e.setDescription(eventDescription);
-        e.setEventDate(eventDate);
-        e.setEventName(eventName);
-        e.setId(id);
-
-        EventServlet.Created.put(id,e);
-
-        System.out.println("size of Map "+this.Created.size());
-        id++;
-        session.setAttribute("Created",this.Created);
-        request.setAttribute("Created",this.Created);*/
-
         request.getRequestDispatcher("/WEB-INF/jsp/view/welcome.jsp")//User's Home page
                 .forward(request, response);
     }

@@ -39,8 +39,7 @@
                     <%
        if(eventDatabase != null){
        for(String name : eventDatabase.keySet()){
-            if(eventDatabase.get(session.getAttribute(name)) != null ){
-            LinkedList<Event> e = eventDatabase.get(session.getAttribute(name));// grab all values for key
+            LinkedList<Event> e = eventDatabase.get(session.getAttribute("username"));// grab all values for key
             for(int i = 0; i < e.size(); i++)
                 {
                     String eventName = e.get(i).getEventName();
@@ -56,7 +55,6 @@
                 EventID: <%= eventID %> <br/>
                 <br />
                     <%
-                }
                 }
 }
 
