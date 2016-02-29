@@ -3,8 +3,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="com.Calendar.Event" %>
-<%@ page import="java.util.LinkedHashMap" %>
-<%@ page import="java.util.Date" %>
 <%@ page import="java.util.LinkedList" %>
 
 <%
@@ -41,7 +39,7 @@ else
             for(int i = 0; i < e.size(); i++)
                 {
                     String eventName = e.get(i).getEventName();
-                    Date eventDate = e.get(i).getEventDate();
+                    String eventDate = e.get(i).getEventDate();
                     String eventDesc = e.get(i).getDescription();
                     String eventUser = e.get(i).getUsername();
                     int eventID = e.get(i).getId();

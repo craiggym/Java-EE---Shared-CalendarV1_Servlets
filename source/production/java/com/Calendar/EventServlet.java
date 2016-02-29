@@ -50,19 +50,14 @@ public class EventServlet extends HttpServlet {
             case "create":
                 this.createEventPage(request, response);
                 break;
-            case "create_event":
+            case "add_event":
                     this.addEvent(request,response);
                      break;
-      /*      case "Created_view":
-                this.usercreated(request, response);
-                break;
-            case "userEventView":
-                this.userview(request, response);
-                break;*/
             case "viewAll":
                 this.viewAll(request, response);
                 break;
             default:
+                System.out.println("Coult not link action to a switch case. Default loaded!");
                 this.userHome(request, response);
                 break;
         }
@@ -117,6 +112,7 @@ public class EventServlet extends HttpServlet {
     private void addEvent(HttpServletRequest request,HttpServletResponse response)
             throws ServletException, IOException {
 
+        // Taken from HTML form
         HttpSession session = request.getSession(false);
         String eventName = request.getParameter("eventName");
         String eventDescription = request.getParameter("Description");
@@ -126,39 +122,32 @@ public class EventServlet extends HttpServlet {
         String string = request.getParameter("month"); // Passed from HTML
         String[] parser = string.split("_"); // Parse using the indicator
         String parseMonth = parser[1]; // Take what we want
+        int monthWeight = Integer.parseInt(parseMonth);
         string = request.getParameter("date"); // Repeat for date...
         parser = string.split("_");
         String parsedDate = parser[1];
+        int dateWeight = Integer.parseInt(parsedDate);
 
-        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
-        String dateToString = "2016-" + parseMonth + "-" + parsedDate;
-        Date eventDate = null;
-        try {
-            eventDate = date.parse(dateToString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        String eventDate =  parseMonth + "-" + parsedDate + "-2016";
 
 
+
+        // Pre-paring the container for the Event object
         session.setAttribute("eventName", eventName);
         session.setAttribute("Description", eventDescription);
         session.setAttribute("eventDate", eventDate);
         session.setAttribute("username", username);
         session.setAttribute("id", id++);
+        Event createdNewEvent = new Event(eventName, eventDate, eventDescription, username, id); // Create event object
 
-        Event createdNewEvent = new Event(eventName, eventDate, eventDescription, username, id);
-
+        // Check if the user has a set of events yet //
         LinkedList checkForNull = eventDatabase.get(username);
-        if(checkForNull == null) eventLinkedList = new LinkedList<>();
+        if(checkForNull == null) eventLinkedList = new LinkedList<>(); // If no event set, create a new one
 
-        eventLinkedList.add(createdNewEvent); // Append new event even if there are no events in list
+        eventLinkedList.add(createdNewEvent); // Append new event
         eventDatabase.put(username,eventLinkedList); // The appended linked list will overwrite pre-existing one
-       // personalDatabase.put(id++,createdNewEvent);
+
         request.setAttribute("eventDatabase", this.eventDatabase);
-       // request.setAttribute("personalDatabase", this.personalDatabase);
-
-        System.out.println("size of Map "+this.eventDatabase.size());
-
         request.getRequestDispatcher("/WEB-INF/jsp/view/welcome.jsp")//User's Home page
                 .forward(request, response);
     }

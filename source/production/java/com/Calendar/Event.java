@@ -20,11 +20,11 @@ public class Event {
 
     private Integer id;
     private String eventName;
-    private Date eventDate;
+    private String eventDate;
     private String eventDescription;
     private String username;
 
-    Event(String name, Date date, String desc, String uname, Integer id) {
+    Event(String name, String date, String desc, String uname, Integer id) {
         this.eventName = name;
         this.eventDate = date;
         this.eventDescription = desc;
@@ -33,7 +33,7 @@ public class Event {
     }
 
     //============== Getters ====================================
-    public Date getEventDate() {
+    public String getEventDate() {
         return this.eventDate;
     }
 
@@ -53,7 +53,7 @@ public class Event {
         this.eventName = name;
     }
 
-    public void setEventDate(Date date) {
+    public void setEventDate(String date) {
         this.eventDate = date;
     }
 
