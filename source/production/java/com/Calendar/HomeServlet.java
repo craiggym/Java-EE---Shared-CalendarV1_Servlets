@@ -158,7 +158,8 @@ public class HomeServlet extends HttpServlet
     private void goHome(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        request.setAttribute("Created",EventServlet.Created);
+        //request.setAttribute("Created",EventServlet.Created);
+        request.setAttribute("allEvents",EventServlet.eventDatabase);
         request.getRequestDispatcher("/WEB-INF/jsp/view/browse.jsp")
                .forward(request, response);
     }

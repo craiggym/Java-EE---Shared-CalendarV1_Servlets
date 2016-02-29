@@ -54,15 +54,12 @@ public class EventServlet extends HttpServlet {
             case "create_event":
                     this.addEvent(request,response);
                      break;
-            case "Created_view":
+      /*      case "Created_view":
                 this.usercreated(request, response);
-                break;
-            case "logout":
-                this.logout(request, response);
                 break;
             case "userEventView":
                 this.userview(request, response);
-                break;
+                break;*/
             default:
                 this.userHome(request, response);
                 break;
@@ -118,40 +115,43 @@ public class EventServlet extends HttpServlet {
     private void addEvent(HttpServletRequest request,HttpServletResponse response)
             throws ServletException, IOException{
 
-        request.getRequestDispatcher("/WEB-INF/jsp/view/welcome.jsp")//to create an event
-                .forward(request, response);
         HttpSession session = request.getSession(false);
         String eventName=request.getParameter("eventName");
         String eventDescription=request.getParameter("Description");
-        String eventDate=request.getParameter("eventDate");
         String username=(String) session.getAttribute("username");
-        //HttpSession session=request.getSession(false);
 
-/*
-        // Test event //
-        Event testEvent = new Event("Golfing", date.getTime(), "Going to golf with the boss");
-        eventDatabase.put(request.getParameter("username"),testEvent);
-        System.out.println("Events database:\n " + eventDatabase);
-        request.setAttribute("eventDatabase", this.eventDatabase);
-        // end test event*/
+        // Parsing the date passed from the HTML form //
+        String string = request.getParameter("month"); // Passed from HTML
+        String[] parser = string.split("_"); // Parse using the indicator
+        String parseMonth = parser[1]; // Take what we want
+        string = request.getParameter("date"); // Repeat for date...
+        parser = string.split("_");
+        String parsedDate = parser[1];
+        System.out.printf("Month = %s; Date =%s\n", parseMonth,parsedDate); // For logging if it was correct
+
+        SimpleDateFormat date = new SimpleDateFormat("2016-" + parseMonth + "-" + parsedDate);
+        SimpleDateFormat eventDate=date;
 
         session.setAttribute("eventName",eventName);
         session.setAttribute("eventDate",eventDate);
-        //System.out.println(eventDate+eventName);
         session.setAttribute("Description",eventDescription);
-        Event e=new Event();
+        Event createdNewEvent = new Event(eventName, eventDate,eventDescription);
+        eventDatabase.put(username,createdNewEvent);
+        request.setAttribute("eventDatabase",this.eventDatabase);
+
+   /*     Event e=new Event();
         e.setUsername(username);
         e.setDescription(eventDescription);
         e.setEventDate(eventDate);
         e.setEventName(eventName);
         e.setId(id);
 
-
         EventServlet.Created.put(id,e);
+
         System.out.println("size of Map "+this.Created.size());
         id++;
         session.setAttribute("Created",this.Created);
-        request.setAttribute("Created",this.Created);
+        request.setAttribute("Created",this.Created);*/
 
         request.getRequestDispatcher("/WEB-INF/jsp/view/welcome.jsp")//User's Home page
                 .forward(request, response);
@@ -175,29 +175,16 @@ public class EventServlet extends HttpServlet {
                 .forward(request, response);
         }
 
-    /*********************************************************
-     *logout
-     * Logs the user out
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
-     ********************************************************/
-    private void logout(HttpServletRequest request,HttpServletResponse response)
-            throws ServletException, IOException
-    {
-        HttpSession session = request.getSession(false);
-        session.invalidate();//to invalidate the session
-        System.out.println("In Log out");
-        request.getRequestDispatcher("/WEB-INF/jsp/view/logout.jsp")
-                .forward(request, response);
-    }
+
     private void userview(HttpServletRequest request,HttpServletResponse response)
             throws ServletException, IOException
     {
         request.getRequestDispatcher("/WEB-INF/jsp/view/userView.jsp")
                 .forward(request, response);
     }
+
+
+
     private void usercreated(HttpServletRequest request,HttpServletResponse response)
             throws ServletException, IOException
     {

@@ -1,5 +1,8 @@
 package com.Calendar;
 
+import sun.java2d.pipe.SpanShapeRenderer;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -18,30 +21,51 @@ public class Event {
     private Integer id;
 
     private String eventName;
-/*<<<<<<< HEAD
-    private Date eventDate;
+    private SimpleDateFormat eventDate;
     private String eventDescription;
+    private String username;
 
-    Event(String name, Date date, String desc){
+    Event(String name, SimpleDateFormat date, String desc) {
         this.eventName = name;
         this.eventDate = date;
         this.eventDescription = desc;
     }
 
     //============== Getters ====================================
-    public Date getEventDate() { return eventDate; }
-    public String getEventName() { return eventName; }
-    public String getDescription() { return eventDescription;  }
+    public SimpleDateFormat getEventDate() {
+        return eventDate;
+    }
+
+    public String getEventName() {
+        return eventName;
+    }
+
+    public String getDescription() {
+        return eventDescription;
+    }
 
     //============ Setters ==========================================
-    public void setEventName(String name) { this.eventName = name; }
-    public void setEventDate(Date date) { this.eventDate = date; }
-    public void setDescription(String body) { this.eventDescription = body; }
+    public void setEventName(String name) {
+        this.eventName = name;
+    }
 
-=======*/
+    public void setEventDate(SimpleDateFormat date) {
+        this.eventDate = date;
+    }
 
-    private String eventDate;
+    public void setDescription(String body) {
+        this.eventDescription = body;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public String getUsername() {
+        return username;
+    }
+}
 
+/*
+    private SimpleDateFormat eventDate;
     private String description;
     private String username;
 
@@ -53,7 +77,7 @@ public class Event {
         this.eventName = eventName;
     }
 
-    public String getEventDate() {
+    public SimpleDateFormat getEventDate() {
         return eventDate;
     }
 
@@ -78,4 +102,4 @@ public class Event {
     public void setDescription(String description) {
         this.description = description;
     }
-}
+}*/

@@ -4,14 +4,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="com.Calendar.Event" %>
+<%@ page import="java.util.LinkedHashMap" %>
+
 <%
     @SuppressWarnings("unchecked")
     Map<String, Event> eventDatabase =
             (Map<String, Event>)request.getAttribute("eventDatabase");
+
 %>
 <html>
 <head>
-    <title>User Homepage</title>
+    <title>User Homepages</title>
     <link rel="stylesheet" type="text/css" href="styles/styles.css"/>
 </head>
 <body>
@@ -21,7 +24,24 @@
 <br/>
 <br/>
 
+<%
+    if(eventDatabase == null || eventDatabase.size() == 0)
+    {
+%><h3>Not subscribed to any events!</h3> <br/><p><em>Create one or follow one from the All Events page!</em><p></p><%
+}
+else
+{
+    for(Event name : eventDatabase.values())
+    {
+        String eventName = name.getEventName();
+        String desc = name.getDescription();
+        %>Event: <%= eventName %> <br/>
 
+
+<br /><%
+        }
+    }
+%>
 
 <br/>
 
@@ -30,22 +50,13 @@
 </form>
 <form action="home?action=logout" method="POST">
     <input type="submit" value="Log out"><br/>
-    </form>
+</form>
 
 <form action="home" method="POST">
     <input type="submit" value="Event Page">
 </form>
 <br/>
-<hr/>
-<h2>To view the Your Event Page click the button below</h2>
-<form action="event?action=userEventView" method="POST">
-    <input type="submit" value="Events you liked">
 
-</form>
-<h2>To view the created events click the button below</h2>
-<form action="event?action=Created_view" method="POST">
-    <input type="submit" value="Created Events">
-</form>
 
 </body>
 </html>
