@@ -19,16 +19,17 @@ public class Event {
     }
 
     private Integer id;
-
     private String eventName;
     private Date eventDate;
     private String eventDescription;
     private String username;
 
-    Event(String name, Date date, String desc) {
+    Event(String name, Date date, String desc, String uname, Integer id) {
         this.eventName = name;
         this.eventDate = date;
         this.eventDescription = desc;
+        this.username = uname;
+        this.id = id;
     }
 
     //============== Getters ====================================

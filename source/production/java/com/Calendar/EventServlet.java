@@ -11,10 +11,7 @@ import java.io.PrintWriter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -24,8 +21,10 @@ import java.util.Map;
         urlPatterns = {"/welcome", "/event"})
 public class EventServlet extends HttpServlet {
     public static Calendar date = Calendar.getInstance();
-    public static Map<Integer, Event> eventDatabase = new LinkedHashMap<>();
-    public static Map<Integer, Event> personalDatabase = new LinkedHashMap<>();
+   // public static Map<Integer, Event> eventDatabase = new LinkedHashMap<>();
+    //public static Map<Integer, Event> personalDatabase = new LinkedHashMap<>();
+    public static Map<String, LinkedList<Event>> eventDatabase = new HashMap<>();
+    public static LinkedList<Event> eventLinkedList = new LinkedList<>();
     int id=0;
 
     /************************************
@@ -139,13 +138,17 @@ public class EventServlet extends HttpServlet {
 
 
         session.setAttribute("eventName", eventName);
-        session.setAttribute("eventDate", eventDate);
         session.setAttribute("Description", eventDescription);
-        Event createdNewEvent = new Event(eventName, eventDate, eventDescription);
-        eventDatabase.put(id++,createdNewEvent);
-        personalDatabase.put(id++,createdNewEvent);
+        session.setAttribute("eventDate", eventDate);
+        session.setAttribute("username", username);
+        session.setAttribute("id", id);
+
+        Event createdNewEvent = new Event(eventName, eventDate, eventDescription, username, id);
+        eventLinkedList.add(createdNewEvent); // Append new event even if there are no events in list
+        eventDatabase.put(username,eventLinkedList); // The appended linked list will overwrite pre-existing one
+       // personalDatabase.put(id++,createdNewEvent);
         request.setAttribute("eventDatabase", this.eventDatabase);
-        request.setAttribute("personalDatabase", this.personalDatabase);
+       // request.setAttribute("personalDatabase", this.personalDatabase);
 
         System.out.println("size of Map "+this.eventDatabase.size());
 
@@ -199,7 +202,7 @@ public class EventServlet extends HttpServlet {
             throws ServletException, IOException
     {
 
-        request.setAttribute("Created", this.personalDatabase);
+      //  request.setAttribute("Created", this.personalDatabase);
 
 
         request.getRequestDispatcher("/WEB-INF/jsp/view/usercreated.jsp")
