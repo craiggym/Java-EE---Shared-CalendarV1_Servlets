@@ -49,7 +49,7 @@ public class HomeServlet extends HttpServlet
 
     static {
         userDatabase.put("Neil", "Armstrong");
-        userDatabase.put("Abraham", "Lincoln");
+        userDatabase.put("th", "th");
         userDatabase.put("Cesar", "Chavez");
         userDatabase.put("Pocahontas", "Rebeccarolfe");
     }
@@ -124,11 +124,12 @@ public class HomeServlet extends HttpServlet
     private void goHome(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
+        request.setAttribute("Created",EventServlet.Created);
         request.getRequestDispatcher("/WEB-INF/jsp/view/browse.jsp")
                .forward(request, response);
     }
 
-    /************************************************************************
+    /*********************************************************************
      * Title: userAdd
      * Description: Adds user to "database"
      * @param request

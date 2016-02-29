@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -23,7 +24,8 @@ import java.util.Map;
         urlPatterns = {"/eventServlet", "/event"})
 public class EventServlet extends HttpServlet {
 
-    public static Map<String, String> Created = new LinkedHashMap<>();
+    public static Map<Integer, Event> Created = new LinkedHashMap<>();
+    int id=1;
     //public static Map<String, String> Liked = new LinkedHashMap<>();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -43,12 +45,16 @@ public class EventServlet extends HttpServlet {
 
                     this.addEvent(request,response);
                      break;
-            case "view":
-                this.userHome(request, response);
+            case "Created_view":
+                this.usercreated(request, response);
                 break;
             case "logout":
                 this.logout(request, response);
                 break;
+            case "userEventView":
+                this.userview(request, response);
+                break;
+
             default:
                 this.userHome(request, response);
                 break;
@@ -102,13 +108,26 @@ public class EventServlet extends HttpServlet {
         String eventName=request.getParameter("eventName");
         String eventDescription=request.getParameter("Description");
         String eventDate=request.getParameter("eventDate");
+        String username=(String) session.getAttribute("username");
         //HttpSession session=request.getSession(false);
 
         session.setAttribute("eventName",eventName);
         session.setAttribute("eventDate",eventDate);
+        //System.out.println(eventDate+eventName);
         session.setAttribute("Description",eventDescription);
-        EventServlet.Created.put("eventDate","eventName");
+        Event e=new Event();
+        e.setUsername(username);
+        e.setDescription(eventDescription);
+        e.setEventDate(eventDate);
+        e.setEventName(eventName);
+        e.setId(id);
+
+
+        EventServlet.Created.put(id,e);
+        System.out.println("size of Map "+this.Created.size());
+        id++;
         session.setAttribute("Created",this.Created);
+        request.setAttribute("Created",this.Created);
 
 
         request.getRequestDispatcher("/WEB-INF/jsp/view/welcome.jsp")//User's Home page
@@ -148,6 +167,23 @@ public class EventServlet extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/jsp/view/logout.jsp")
                 .forward(request, response);
     }
+    private void userview(HttpServletRequest request,HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        request.getRequestDispatcher("/WEB-INF/jsp/view/userView.jsp")
+                .forward(request, response);
+    }
+    private void usercreated(HttpServletRequest request,HttpServletResponse response)
+            throws ServletException, IOException
+    {
+
+        request.setAttribute("Created", this.Created);
+
+
+        request.getRequestDispatcher("/WEB-INF/jsp/view/usercreated.jsp")
+                .forward(request, response);
+    }
+
 
 
 
