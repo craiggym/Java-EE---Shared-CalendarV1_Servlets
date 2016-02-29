@@ -21,19 +21,19 @@ public class Event {
     private Integer id;
 
     private String eventName;
-    private SimpleDateFormat eventDate;
+    private Date eventDate;
     private String eventDescription;
     private String username;
 
-    Event(String name, SimpleDateFormat date, String desc) {
+    Event(String name, Date date, String desc) {
         this.eventName = name;
         this.eventDate = date;
         this.eventDescription = desc;
     }
 
     //============== Getters ====================================
-    public SimpleDateFormat getEventDate() {
-        return eventDate;
+    public Date getEventDate() {
+        return this.eventDate;
     }
 
     public String getEventName() {
@@ -43,13 +43,16 @@ public class Event {
     public String getDescription() {
         return eventDescription;
     }
+    public String getUsername() {
+        return username;
+    }
 
     //============ Setters ==========================================
     public void setEventName(String name) {
         this.eventName = name;
     }
 
-    public void setEventDate(SimpleDateFormat date) {
+    public void setEventDate(Date date) {
         this.eventDate = date;
     }
 
@@ -59,9 +62,7 @@ public class Event {
     public void setUsername(String username) {
         this.username = username;
     }
-    public String getUsername() {
-        return username;
-    }
+
 }
 
 /*

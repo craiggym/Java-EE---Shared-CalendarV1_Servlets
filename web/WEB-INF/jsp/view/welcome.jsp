@@ -5,11 +5,12 @@
 <%@ page import="java.util.Map" %>
 <%@ page import="com.Calendar.Event" %>
 <%@ page import="java.util.LinkedHashMap" %>
+<%@ page import="java.util.Date" %>
 
 <%
     @SuppressWarnings("unchecked")
-    Map<String, Event> eventDatabase =
-            (Map<String, Event>)request.getAttribute("eventDatabase");
+    Map<Integer, Event> eventDatabase =
+            (Map<Integer, Event>)request.getAttribute("personalDatabase");
 
 %>
 <html>
@@ -35,7 +36,10 @@ else
     {
         String eventName = name.getEventName();
         String desc = name.getDescription();
+        Date date = name.getEventDate();
         %>Event: <%= eventName %> <br/>
+        Description: <%= desc %> <br/>
+        Date: <%= date %> <br/>
 
 
 <br /><%

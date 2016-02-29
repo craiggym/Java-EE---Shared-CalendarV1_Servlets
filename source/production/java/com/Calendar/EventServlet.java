@@ -24,9 +24,9 @@ import java.util.Map;
         urlPatterns = {"/welcome", "/event"})
 public class EventServlet extends HttpServlet {
     public static Calendar date = Calendar.getInstance();
-    public static Map<String, Event> eventDatabase = new LinkedHashMap<>();
-    public static Map<Integer, Event> Created = new LinkedHashMap<>();
-    int id=1;
+    public static Map<Integer, Event> eventDatabase = new LinkedHashMap<>();
+    public static Map<Integer, Event> personalDatabase = new LinkedHashMap<>();
+    int id=0;
 
     /************************************
      * doPost
@@ -113,12 +113,12 @@ public class EventServlet extends HttpServlet {
      * @throws IOException
      ********************************************************/
     private void addEvent(HttpServletRequest request,HttpServletResponse response)
-            throws ServletException, IOException{
+            throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-        String eventName=request.getParameter("eventName");
-        String eventDescription=request.getParameter("Description");
-        String username=(String) session.getAttribute("username");
+        String eventName = request.getParameter("eventName");
+        String eventDescription = request.getParameter("Description");
+        String username = (String) session.getAttribute("username");
 
         // Parsing the date passed from the HTML form //
         String string = request.getParameter("month"); // Passed from HTML
@@ -127,17 +127,27 @@ public class EventServlet extends HttpServlet {
         string = request.getParameter("date"); // Repeat for date...
         parser = string.split("_");
         String parsedDate = parser[1];
-        System.out.printf("Month = %s; Date =%s\n", parseMonth,parsedDate); // For logging if it was correct
 
-        SimpleDateFormat date = new SimpleDateFormat("2016-" + parseMonth + "-" + parsedDate);
-        SimpleDateFormat eventDate=date;
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+        String dateToString = "2016-" + parseMonth + "-" + parsedDate;
+        Date eventDate = null;
+        try {
+            eventDate = date.parse(dateToString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        session.setAttribute("eventName",eventName);
-        session.setAttribute("eventDate",eventDate);
-        session.setAttribute("Description",eventDescription);
-        Event createdNewEvent = new Event(eventName, eventDate,eventDescription);
-        eventDatabase.put(username,createdNewEvent);
-        request.setAttribute("eventDatabase",this.eventDatabase);
+
+        session.setAttribute("eventName", eventName);
+        session.setAttribute("eventDate", eventDate);
+        session.setAttribute("Description", eventDescription);
+        Event createdNewEvent = new Event(eventName, eventDate, eventDescription);
+        eventDatabase.put(id++,createdNewEvent);
+        personalDatabase.put(id++,createdNewEvent);
+        request.setAttribute("eventDatabase", this.eventDatabase);
+        request.setAttribute("personalDatabase", this.personalDatabase);
+
+        System.out.println("size of Map "+this.eventDatabase.size());
 
    /*     Event e=new Event();
         e.setUsername(username);
@@ -189,7 +199,7 @@ public class EventServlet extends HttpServlet {
             throws ServletException, IOException
     {
 
-        request.setAttribute("Created", this.Created);
+        request.setAttribute("Created", this.personalDatabase);
 
 
         request.getRequestDispatcher("/WEB-INF/jsp/view/usercreated.jsp")
