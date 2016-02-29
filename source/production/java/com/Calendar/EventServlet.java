@@ -26,7 +26,7 @@ public class EventServlet extends HttpServlet {
     public static Map<String, Event> eventDatabase = new LinkedHashMap<>();
 
     /************************************
-     * doPost Method
+     * doPost
      * Create and view events
      * @param request
      * @param response
@@ -38,6 +38,7 @@ public class EventServlet extends HttpServlet {
             response.sendRedirect("home");
             return;
         }
+
 
         String action = request.getParameter("action");
         if (action == null)
@@ -59,7 +60,7 @@ public class EventServlet extends HttpServlet {
     }
 
     /************************************
-     * doGet Method
+     * doGet
      * View events
      * @param request
      * @param response
@@ -117,6 +118,7 @@ public class EventServlet extends HttpServlet {
         Event testEvent = new Event("Golfing", date.getTime(), "Going to golf with the boss");
         eventDatabase.put(request.getParameter("username"),testEvent);
         System.out.println("Events database:\n " + eventDatabase);
+        request.setAttribute("eventDatabase", this.eventDatabase);
         // end test event
 
        // session.setAttribute("eventName",eventName);
@@ -142,6 +144,7 @@ public class EventServlet extends HttpServlet {
          {
              HttpSession session = request.getSession(false);
              String username =(String)session.getAttribute("username");
+             request.setAttribute("eventDatabase", this.eventDatabase);
 
         request.getRequestDispatcher("/WEB-INF/jsp/view/welcome.jsp")//User's Home page
                 .forward(request, response);

@@ -29,7 +29,7 @@ else
 %>
 
 <br/>
-<form action="event?action=create_event" method="POST">
+<form action="event?action=create" method="POST">
     <input type="submit" value="Create Event"><br/>
 </form>
 <form action="home?action=logout" method="POST">
