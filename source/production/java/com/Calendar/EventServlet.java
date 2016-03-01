@@ -1,5 +1,7 @@
 package com.Calendar;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,8 +25,11 @@ public class EventServlet extends HttpServlet {
     public static Calendar date = Calendar.getInstance();
    // public static Map<Integer, Event> eventDatabase = new LinkedHashMap<>();
     //public static Map<Integer, Event> personalDatabase = new LinkedHashMap<>();
-    public static Map<String, LinkedList<Event>> eventDatabase = new HashMap<>();
-    public static LinkedList<Event> eventLinkedList = new LinkedList<>();
+
+    //public static Map<String, LinkedList<Event>> eventDatabase = new HashMap<>();
+    //public static LinkedList<Event> eventLinkedList = new LinkedList<>();
+    public static Map<String, List<Event>> eventDatabase = new HashMap<>();
+    public static List<Event> eventArrayList = new ArrayList<>();
     int id=0;
 
     /************************************
@@ -41,7 +46,6 @@ public class EventServlet extends HttpServlet {
             response.sendRedirect("home");
             return;
         }
-
 
         String action = request.getParameter("action");
         if (action == null)
@@ -118,6 +122,7 @@ public class EventServlet extends HttpServlet {
         String eventDescription = request.getParameter("Description");
         String username = (String) session.getAttribute("username");
 
+
         // Parsing the date passed from the HTML form //
         String string = request.getParameter("month"); // Passed from HTML
         String[] parser = string.split("_"); // Parse using the indicator
@@ -127,9 +132,7 @@ public class EventServlet extends HttpServlet {
         parser = string.split("_");
         String parsedDate = parser[1];
         int dateWeight = Integer.parseInt(parsedDate);
-
         String eventDate =  parseMonth + "-" + parsedDate + "-2016";
-
 
 
         // Pre-paring the container for the Event object
@@ -139,15 +142,33 @@ public class EventServlet extends HttpServlet {
         session.setAttribute("username", username);
         session.setAttribute("id", id++);
         Event createdNewEvent = new Event(eventName, eventDate, eventDescription, username, id); // Create event object
+        createdNewEvent.setMonthWeight(monthWeight);
+        createdNewEvent.setDateWeight(dateWeight);
 
-        // Check if the user has a set of events yet //
-        LinkedList checkForNull = eventDatabase.get(username);
-        if(checkForNull == null) eventLinkedList = new LinkedList<>(); // If no event set, create a new one
+        List<Event> checkForNull = eventDatabase.get(username);
+        if(checkForNull == null) eventArrayList = new ArrayList<>(); // If no event set, create a new one
 
-        eventLinkedList.add(createdNewEvent); // Append new event
-        eventDatabase.put(username,eventLinkedList); // The appended linked list will overwrite pre-existing one
+        //======================= SORTING CODE ===================== //
+        eventArrayList.add(createdNewEvent);
+        System.out.println(eventArrayList.size() + " is the current size");
+        if(eventArrayList != null || eventArrayList.size() > 1) {
+            System.out.println("sorting...");
+            Collections.sort(eventArrayList, new Comparator<Event>() {
+                @Override
+                public int compare(Event o1, Event o2) {
+                    System.out.println(o1.getMonthWeight() + " compare to " + o2.getMonthWeight());
+                    if(o1.getMonthWeight() == o2.getMonthWeight()){
+                        return o1.getDateWeight()-o2.getDateWeight();
+                    }
+                    return o1.getMonthWeight()-o2.getMonthWeight();
+                }
+            });
+        }
+        //======================================================================
+        eventDatabase.put(username, eventArrayList);
 
-        request.setAttribute("eventDatabase", this.eventDatabase);
+
+        request.setAttribute("eventDatabase", eventDatabase);
         request.getRequestDispatcher("/WEB-INF/jsp/view/welcome.jsp")//User's Home page
                 .forward(request, response);
     }
@@ -164,7 +185,7 @@ public class EventServlet extends HttpServlet {
          {
              HttpSession session = request.getSession(false);
              String username =(String)session.getAttribute("username");
-             request.setAttribute("eventDatabase", this.eventDatabase);
+             request.setAttribute("eventDatabase", eventDatabase);
 
         request.getRequestDispatcher("/WEB-INF/jsp/view/welcome.jsp")//User's Home page
                 .forward(request, response);
@@ -183,11 +204,19 @@ public class EventServlet extends HttpServlet {
     {
         HttpSession session = request.getSession(false);
         String username =(String)session.getAttribute("username");
-        request.setAttribute("eventDatabase", this.eventDatabase);
+        request.setAttribute("eventDatabase", eventDatabase);
 
         request.getRequestDispatcher("/WEB-INF/jsp/view/browse.jsp")//User's Home page
                 .forward(request, response);
     }
-
-
+/*
+   public class eventComparator implements Comparator
+    {
+        @Override
+        public int compare(Object o1, Object o2) {
+            Event e1 = (Event) o1;
+            Event e2 = (Event) o2;
+            return e1.getMonthWeight()-e2.getMonthWeight();
+        }
+    }*/
 }

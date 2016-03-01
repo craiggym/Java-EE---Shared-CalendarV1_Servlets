@@ -4,11 +4,13 @@
 <%@ page import="java.util.Map" %>
 <%@ page import="com.Calendar.Event" %>
 <%@ page import="java.util.LinkedList" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
 
 <%
     @SuppressWarnings("unchecked")
-    Map<String, LinkedList<Event>> eventDatabase =
-            (Map<String, LinkedList<Event>>)request.getAttribute("eventDatabase");
+    Map<String, List<Event>> eventDatabase =
+            (Map<String, List<Event>>)request.getAttribute("eventDatabase");
 
 %>
 <html>
@@ -24,7 +26,7 @@
 <br/>
 
 <% // Display message if the user has no events
-    LinkedList<Event> checkForNull = eventDatabase.get(session.getAttribute("username"));
+    List<Event> checkForNull = eventDatabase.get(session.getAttribute("username"));
     if(checkForNull == null || checkForNull.isEmpty()){
 %><h3>Not subscribed to any events!</h3> <br/><p><em>Create one or follow one from the All Events page!</em><p></p><%
 }
@@ -35,7 +37,7 @@ else
         System.out.println("Username is " + session.getAttribute("username"));
         System.out.println("key is " + eName);
         if(eName == session.getAttribute("username")){
-            LinkedList<Event> e = eventDatabase.get(session.getAttribute("username"));// grab all values for key
+            List<Event> e = eventDatabase.get(session.getAttribute("username"));// grab all values for key
             for(int i = 0; i < e.size(); i++)
                 {
                     String eventName = e.get(i).getEventName();

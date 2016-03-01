@@ -9,7 +9,7 @@
         <title>Home Page</title>
             <%    @SuppressWarnings("unchecked")
 
-    Map<String, LinkedList<Event>> eventDatabase =
+    Map<String, List<Event>> eventDatabase =
           EventServlet.eventDatabase;%>
     </head>
     <body>
@@ -41,7 +41,7 @@
                     <%
        if(eventDatabase != null){
        for(String name : eventDatabase.keySet()){
-            LinkedList<Event> e = eventDatabase.get(name);// grab all values for key
+            List<Event> e = eventDatabase.get(name);// grab all values for key
             for(int i = 0; i < e.size(); i++)
                 {
                     String eventName = e.get(i).getEventName();

@@ -3,12 +3,13 @@ package com.Calendar;
 import sun.java2d.pipe.SpanShapeRenderer;
 
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
  * Created by BHARATH on 2/26/2016.
  */
-public class Event {
+public class Event{
 
     public Integer getId() {
         return id;
@@ -23,6 +24,8 @@ public class Event {
     private String eventDate;
     private String eventDescription;
     private String username;
+    private int monthWeight;
+    private int dateWeight;
 
     Event(String name, String date, String desc, String uname, Integer id) {
         this.eventName = name;
@@ -47,6 +50,8 @@ public class Event {
     public String getUsername() {
         return username;
     }
+    public int getMonthWeight() {return monthWeight;}
+    public int getDateWeight() {return dateWeight;}
 
     //============ Setters ==========================================
     public void setEventName(String name) {
@@ -63,7 +68,12 @@ public class Event {
     public void setUsername(String username) {
         this.username = username;
     }
-
+    public void setMonthWeight(int m){
+        this.monthWeight = m;
+    }
+    public void setDateWeight(int d){
+        this.dateWeight = d;
+    }
 }
 
 /*
