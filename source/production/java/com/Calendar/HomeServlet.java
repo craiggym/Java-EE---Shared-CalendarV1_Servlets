@@ -17,41 +17,13 @@ import java.util.Map;
 )
 public class HomeServlet extends HttpServlet
 {
-    // User class which holds username and password
-    /*public class User{
-        public User(String name, String pass){ // Constructor for User
-            this.name=name;
-            this.password=pass;
-        }
-
-        //private LinkedList<String> events = new LinkedList<>(); // user events
-        private String name; // user's name
-        private String password; // user's password
-    } // Close class User
-    // pre-defined users
-    User neil = new User("Neil", "Armstrong");
-    User abraham = new User("Abraham", "Lincoln");
-    User cesar = new User("Cesar", "Chavez");
-    User pocahontas = new User("Pocahontas", "Rebeccarolfe");
-
-    private static int ID = 0; // Increment users ID while adding to database
-
-    private final Map<Integer, User> db = new Hashtable<>(); // database
-    public HomeServlet() // Constructor for HomeServlet
-    {
-        this.db.put(ID++, neil);
-        this.db.put(ID++, abraham);
-        this.db.put(ID++, cesar);
-        this.db.put(ID++, pocahontas);
-    }
-*/
     private static final Map<String, String> userDatabase = new Hashtable<>();
 
     static {
         userDatabase.put("Neil", "Armstrong");
         userDatabase.put("th", "th");
         userDatabase.put("Cesar", "Chavez");
-        userDatabase.put("test", "");
+        userDatabase.put("test", "a");
     }
 
     /*****************************************************
@@ -176,12 +148,9 @@ public class HomeServlet extends HttpServlet
     {
         String fname = request.getParameter("fname");
         String pass = request.getParameter("pass");
-        //User person = new User(fname, pass);
-        //Hdb.put(ID++,person); // add the user
+
         HomeServlet.userDatabase.put(fname,pass);
-
-        System.out.println("User " + fname + " added.");
-
+        
         request.getRequestDispatcher("/WEB-INF/jsp/view/registerSuccess.jsp")
                 .forward(request, response);
     }
