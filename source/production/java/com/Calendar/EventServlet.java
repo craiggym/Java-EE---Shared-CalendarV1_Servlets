@@ -56,11 +56,13 @@ public class EventServlet extends HttpServlet {
             case "add_event":
                     this.addEvent(request,response);
                      break;
+            case "likedEvent":
+                this.likedEvent(request,response);
+                break;
             case "viewAll":
                 this.viewAll(request, response);
                 break;
             default:
-                System.out.println("Coult not link action to a switch case. Default loaded!");
                 this.userHome(request, response);
                 break;
         }
@@ -134,7 +136,7 @@ public class EventServlet extends HttpServlet {
         String eventDate =  parseMonth + "-" + parsedDate + "-2016";
 
 
-        // Pre-paring the container for the Event object
+        // Preparing the container for the Event object
         session.setAttribute("eventName", eventName);
         session.setAttribute("Description", eventDescription);
         session.setAttribute("eventDate", eventDate);
@@ -143,18 +145,91 @@ public class EventServlet extends HttpServlet {
         Event createdNewEvent = new Event(eventName, eventDate, eventDescription, username, id); // Create event object
         createdNewEvent.setMonthWeight(monthWeight);
         createdNewEvent.setDateWeight(dateWeight);
+        createdNewEvent.setMonthWeightS(parseMonth);
+        createdNewEvent.setDateWeightS(parsedDate);
 
         List<Event> checkForNull = eventDatabase.get(username);
         if(checkForNull == null) eventArrayList = new ArrayList<>(); // If no event set, create a new one
 
         //======================= SORTING CODE ===================== //
         eventArrayList.add(createdNewEvent);
+
         if(eventArrayList != null || eventArrayList.size() > 1) {
-            System.out.println("sorting...");
+            System.out.println("Made it to sort");
             Collections.sort(eventArrayList, new Comparator<Event>() {
                 @Override
                 public int compare(Event o1, Event o2) {
-                    System.out.println(o1.getMonthWeight() + " compare to " + o2.getMonthWeight());
+                    if(o1.getMonthWeight() == o2.getMonthWeight()){
+                        return o1.getDateWeight()-o2.getDateWeight();
+                    }
+                    return o1.getMonthWeight()-o2.getMonthWeight();
+                }
+            });
+        }
+        System.out.print("created func AFTER");
+        for(Event s:eventArrayList)
+            System.out.print(s.getEventName() + ' ');
+        System.out.println('\n');
+        //======================================================================
+        eventDatabase.put(username, eventArrayList);
+
+
+        // Add to the allEvents dbase //
+        if(allEvents != null)
+            allEvents.add(createdNewEvent);
+        else{
+            allEvents = new ArrayList<>();
+            allEvents.add(createdNewEvent);
+        }
+
+
+        request.setAttribute("eventDatabase", eventDatabase);
+        request.getRequestDispatcher("/WEB-INF/jsp/view/welcome.jsp")//User's Home page
+                .forward(request, response);
+    }
+
+    /*********************************************************
+     * likedEvent
+     * Add the liked event to the users events
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     ********************************************************/
+    private void likedEvent(HttpServletRequest request,HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // Taken from HTML form
+        HttpSession session = request.getSession(false);
+        int it = Integer.parseInt(request.getParameter("it")); // Parsed from HTML form
+        String username = (String) session.getAttribute("username");
+
+        // Preparing the container for the Event object
+        String eventName = allEvents.get(it).getEventName();
+        String eventDate = allEvents.get(it).getEventDate();
+        String eventDescription = allEvents.get(it).getDescription();
+        String usercreated = allEvents.get(it).getUsername();
+        int id = allEvents.get(it).getId();
+
+        Event liked_event = new Event(eventName, eventDate, eventDescription, usercreated, id); // Create event object
+        liked_event.setMonthWeight(allEvents.get(it).getMonthWeight());
+        liked_event.setDateWeight(allEvents.get(it).getDateWeight());
+        liked_event.setMonthWeightS(allEvents.get(it).getMonthWeightS());
+        liked_event.setDateWeightS(allEvents.get(it).getDateWeightS());
+
+
+        List<Event> checkForNull = eventDatabase.get(username);
+        if(checkForNull == null)
+                eventArrayList = new ArrayList<>(); // If no event set, create a new one
+
+
+        //======================= SORTING CODE ===================== //
+        eventArrayList.add(liked_event);
+
+        if(eventArrayList != null || eventArrayList.size() > 1) {
+            Collections.sort(eventArrayList, new Comparator<Event>() {
+                @Override
+                public int compare(Event o1, Event o2) {
                     if(o1.getMonthWeight() == o2.getMonthWeight()){
                         return o1.getDateWeight()-o2.getDateWeight();
                     }
@@ -165,7 +240,7 @@ public class EventServlet extends HttpServlet {
         //======================================================================
         eventDatabase.put(username, eventArrayList);
 
-
+        session.setAttribute("username", username);
         request.setAttribute("eventDatabase", eventDatabase);
         request.getRequestDispatcher("/WEB-INF/jsp/view/welcome.jsp")//User's Home page
                 .forward(request, response);
@@ -202,21 +277,11 @@ public class EventServlet extends HttpServlet {
     {
         HttpSession session = request.getSession(false);
         String username =(String)session.getAttribute("username");
-        allEvents = new ArrayList<>();
-        // EXTRACT HASHMAP AND SORT=====================================//;
-        if(eventDatabase != null) {
-            for (String name : eventDatabase.keySet()) {
-                List<Event> e = eventDatabase.get(name);// grab all values for key
-                for (int i = 0; i < e.size(); i++) // Iterate through the list for each key user
-                    allEvents.add(e.get(i)); // Gobble gobble
-            }
-        }
+
         if(allEvents != null || allEvents.size() > 1) {
-            System.out.println("sorting all events...");
             Collections.sort(allEvents, new Comparator<Event>() {
                 @Override
                 public int compare(Event o1, Event o2) {
-                    System.out.println(o1.getEventName() + " compare to " + o2.getEventName());
                     if(o1.getMonthWeight() == o2.getMonthWeight()){
                         return o1.getDateWeight()-o2.getDateWeight();
                     }

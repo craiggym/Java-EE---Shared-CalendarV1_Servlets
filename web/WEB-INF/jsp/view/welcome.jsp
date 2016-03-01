@@ -3,8 +3,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="com.Calendar.Event" %>
-<%@ page import="java.util.LinkedList" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 
 <%
@@ -15,7 +13,7 @@
 %>
 <html>
 <head>
-    <title>User Homepages</title>
+    <title>User Homepage</title>
     <link rel="stylesheet" type="text/css" href="styles/styles.css"/>
 </head>
 <body>
@@ -32,30 +30,26 @@
 }
 else
 {
-    for(String eName : eventDatabase.keySet())
+    List<Event> e = eventDatabase.get(session.getAttribute("username"));// grab all values for key
+    for(int i = 0; i < e.size(); i++)
     {
-        System.out.println("Username is " + session.getAttribute("username"));
-        System.out.println("key is " + eName);
-        if(eName == session.getAttribute("username")){
-            List<Event> e = eventDatabase.get(session.getAttribute("username"));// grab all values for key
-            for(int i = 0; i < e.size(); i++)
-                {
-                    String eventName = e.get(i).getEventName();
-                    String eventDate = e.get(i).getEventDate();
-                    String eventDesc = e.get(i).getDescription();
-                    String eventUser = e.get(i).getUsername();
-                    int eventID = e.get(i).getId();
-                    %>
+
+        {
+            String eventName = e.get(i).getEventName();
+            String eventDate = e.get(i).getEventDate();
+            String eventDesc = e.get(i).getDescription();
+            String eventUser = e.get(i).getUsername();
+            int eventID = e.get(i).getId();
+%>
 Event: <%= eventName %> <br/>
 Date: <%= eventDate %> <br/>
 Description: <%= eventDesc %> <br/>
 User: <%= eventUser %> <br/>
 EventID: <%= eventID %> <br/>
 <br />
+<hr/>
 <%
-                }
-                }
-
+            }
         }
     }
 %>

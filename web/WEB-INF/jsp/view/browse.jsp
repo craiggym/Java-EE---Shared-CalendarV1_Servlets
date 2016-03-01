@@ -40,14 +40,15 @@
                     if(allEvents != null){
                     for(int i = 0; i < allEvents.size(); i++){
                     %>
-                Event: <%= allEvents.get(i).getEventName() %> <br/>
+                Events: <%= allEvents.get(i).getEventName() %> <br/>
                 Date: <%= allEvents.get(i).getEventDate() %> <br/>
                 Description: <%= allEvents.get(i).getDescription() %> <br/>
                 User: <%= allEvents.get(i).getUsername() %> <br/>
                 EventID: <%= allEvents.get(i).getId() %> <br/>
 
                 <% if(session.getAttribute("username") !=null){%>
-                <form action="event?action=add_event" method="POST">
+                <form action="event?action=likedEvent" method="POST">
+                    <input type="hidden" name="it" value="<%= i %>"/>
                     <input type="submit" value="Like">
                 </form>
                     <%

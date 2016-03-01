@@ -26,6 +26,8 @@ public class Event{
     private String username;
     private int monthWeight;
     private int dateWeight;
+    private String monthWeightS;
+    private String dateWeightS;
 
     Event(String name, String date, String desc, String uname, Integer id) {
         this.eventName = name;
@@ -52,6 +54,8 @@ public class Event{
     }
     public int getMonthWeight() {return monthWeight;}
     public int getDateWeight() {return dateWeight;}
+    public String getMonthWeightS() {return monthWeightS;}
+    public String getDateWeightS() {return dateWeightS;}
 
     //============ Setters ==========================================
     public void setEventName(String name) {
@@ -73,6 +77,12 @@ public class Event{
     }
     public void setDateWeight(int d){
         this.dateWeight = d;
+    }
+    public void setMonthWeightS(String m){
+        this.monthWeightS = m;
+    }
+    public void setDateWeightS(String d){
+        this.dateWeightS = d;
     }
 }
 
