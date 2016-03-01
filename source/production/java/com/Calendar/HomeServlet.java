@@ -125,7 +125,6 @@ public class HomeServlet extends HttpServlet
         {
             HttpSession session = request.getSession(true);
             String id=session.getId();
-            System.out.println("id is "+id);
             session.setAttribute("username",username);
             response.sendRedirect("event");
         }

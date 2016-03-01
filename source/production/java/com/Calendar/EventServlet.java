@@ -9,10 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.lang.reflect.Array;
 import java.util.*;
 
 
@@ -30,6 +28,7 @@ public class EventServlet extends HttpServlet {
     //public static LinkedList<Event> eventLinkedList = new LinkedList<>();
     public static Map<String, List<Event>> eventDatabase = new HashMap<>();
     public static List<Event> eventArrayList = new ArrayList<>();
+    public static List<Event> allEvents;
     int id=0;
 
     /************************************
@@ -150,7 +149,6 @@ public class EventServlet extends HttpServlet {
 
         //======================= SORTING CODE ===================== //
         eventArrayList.add(createdNewEvent);
-        System.out.println(eventArrayList.size() + " is the current size");
         if(eventArrayList != null || eventArrayList.size() > 1) {
             System.out.println("sorting...");
             Collections.sort(eventArrayList, new Comparator<Event>() {
@@ -204,19 +202,33 @@ public class EventServlet extends HttpServlet {
     {
         HttpSession session = request.getSession(false);
         String username =(String)session.getAttribute("username");
-        request.setAttribute("eventDatabase", eventDatabase);
+        allEvents = new ArrayList<>();
+        // EXTRACT HASHMAP AND SORT=====================================//;
+        if(eventDatabase != null) {
+            for (String name : eventDatabase.keySet()) {
+                List<Event> e = eventDatabase.get(name);// grab all values for key
+                for (int i = 0; i < e.size(); i++) // Iterate through the list for each key user
+                    allEvents.add(e.get(i)); // Gobble gobble
+            }
+        }
+        if(allEvents != null || allEvents.size() > 1) {
+            System.out.println("sorting all events...");
+            Collections.sort(allEvents, new Comparator<Event>() {
+                @Override
+                public int compare(Event o1, Event o2) {
+                    System.out.println(o1.getEventName() + " compare to " + o2.getEventName());
+                    if(o1.getMonthWeight() == o2.getMonthWeight()){
+                        return o1.getDateWeight()-o2.getDateWeight();
+                    }
+                    return o1.getMonthWeight()-o2.getMonthWeight();
+                }
+            });
+        }
+        //== END HASHMAP AND SORT =======================================
 
+
+        request.setAttribute("allEvents", allEvents);
         request.getRequestDispatcher("/WEB-INF/jsp/view/browse.jsp")//User's Home page
                 .forward(request, response);
     }
-/*
-   public class eventComparator implements Comparator
-    {
-        @Override
-        public int compare(Object o1, Object o2) {
-            Event e1 = (Event) o1;
-            Event e2 = (Event) o2;
-            return e1.getMonthWeight()-e2.getMonthWeight();
-        }
-    }*/
 }
